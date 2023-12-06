@@ -254,3 +254,7 @@ def process_pictures(image_file_path):
                     K_means[sample_names_0[i][j]].append(1-K_mean)
                     # slice_matrix[i, j, pad_y_min:pad_y_max, pad_x_min:pad_x_max, :] = temp_slice
     return pd.DataFrame(K_means)
+	
+def generate_csv(fp, b_id):
+    df = process_pictures(fp)
+    df.to_csv(f'{b_id}_cmet.csv')
