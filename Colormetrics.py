@@ -8,6 +8,7 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 from collections import defaultdict
 from tqdm import tqdm
+from py2neo import Node, Graph, Relationship
 
 
 def rgb_to_cmyk(r, g, b):
