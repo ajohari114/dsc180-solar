@@ -144,7 +144,7 @@ def transform_vm(video_matrix):
     
     return transformed
 
-def temp_name(image_file_path):
+def process_pictures(image_file_path):
     creation_time = []
     image_folder_0 = image_file_path
     go_pro_folders = os.listdir(image_folder_0)[::-1]
@@ -254,7 +254,3 @@ def temp_name(image_file_path):
                     K_means[sample_names_0[i][j]].append(1-K_mean)
                     # slice_matrix[i, j, pad_y_min:pad_y_max, pad_x_min:pad_x_max, :] = temp_slice
     return pd.DataFrame(K_means)
-
-
-
-c_data = temp_name('gopro_images/')
