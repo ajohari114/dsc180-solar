@@ -258,3 +258,38 @@ def process_pictures(image_file_path):
 def generate_csv(fp, b_id):
     df = process_pictures(fp)
     df.to_csv(f'{b_id}_cmet.csv')
+
+
+def add_color_data(b_id, df):
+    '''
+    Insert colormetrics data into the graph database.
+
+    :param: b_id: the batch_id of the samples being inserted into the graph database
+    :param: df: the dataframe of the colormetrics data where each column is a sample
+    '''
+    #graph = Graph("bolt://localhost:7687")
+    samples= df.columns
+    for sample in samples:
+        data = list(df.loc[:, sample])
+        new_node = Node('dummy_data', action = 'char', batch_id = b_id, sample_id = sample, char_name = 'colormetrics', \
+                        char_num_measurements = len(data), char_duration=len(data)*2, char_colormetrics = data, step_id = 32)
+        # find all nodes with a sample_id equal to that in the dataframe
+        sample_nodes = graph.run("MATCH (n:dummy_node {sample_id: $sample, batch_id: $batch, step_id: 27}) RETURN n", sample = sample, batch = b_id)
+        graph.create(new_node)
+        # create relatinships between the node and data node
+        for node in sample_nodes:
+            existing_node = node['n']
+            relationship = Relationship(existing_node, 'NEXT', new_node)
+            graph.create(relationship)
+            
+            
+def generate_color_data(b_id, fp):
+    '''
+    Generates colormetrics data for a given batch and inserts that data into the graph database.
+
+    :param: b_id: the batch_id of the samples being inserted into the graph database
+    :param: fp: a filepath that contains a folder gopro_pics
+    '''
+    c_data = colormetrics(fp)
+    
+    add_color_data(b_id, c_data)
