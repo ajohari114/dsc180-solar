@@ -291,6 +291,6 @@ def generate_color_data(b_id, fp):
     :param: b_id: the batch_id of the samples being inserted into the graph database
     :param: fp: a filepath that contains a folder gopro_pics
     '''
-    c_data = colormetrics(fp)
+    c_data = process_pictures(fp)
     
     add_color_data(b_id, c_data)
