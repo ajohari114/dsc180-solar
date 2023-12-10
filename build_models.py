@@ -14,6 +14,7 @@ from sklearn.pipeline import Pipeline
 from Colormetrics import process_pictures
 from sklearn.multioutput import MultiOutputRegressor
 import numpy as np
+import matplotlib.pyplot as plt
 pd.options.mode.chained_assignment = None
 
 def mse_2d(true, pred):
@@ -77,7 +78,7 @@ regressors = {
     'Ridge Regression': Ridge(),
     'Lasso Regression': Lasso(),
     'ElasticNet': ElasticNet(),
-    'Huber Regressor': HuberRegressor(),
+    'Huber Regressor': HuberRegressor(max_iter=200),
     'Decision Tree Regressor': DecisionTreeRegressor(),
     'Random Forest Regressor': RandomForestRegressor(),
     'Gradient Boosting Regressor': GradientBoostingRegressor(),
@@ -87,6 +88,8 @@ regressors = {
 
 best_model = None
 best_mse = np.inf
+
+test_errors = []
 
 for name, regressor in regressors.items():
     model = Pipeline([
@@ -104,6 +107,17 @@ for name, regressor in regressors.items():
     mse = mse_2d(y_test, y_pred)
     print(f"{name} - MSE on the test set: {mse}")
     
+    test_errors.append(mse)
+    
     if mse < best_mse:
         best_model = model
         best_mse = mse
+        
+        
+temp_df = pd.DataFrame()
+temp_df['regressor'] = regressors.keys()
+temp_df['test_error'] = test_errors
+temp_df = temp_df.sort_values('test_error', ascending = False)
+plt.barh(temp_df['regressor'], temp_df['test_error'], log = True)
+plt.title('Test Error of Each Regressor (Lower is Better)')
+plt.xlabel('Mean Squared Error')
