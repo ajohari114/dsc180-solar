@@ -252,7 +252,7 @@ def process_pictures(image_file_path):
                     pad_y_max = window_size + (y_max - y)
 
 
-                    K_means[sample_names_0[i][j]].append(1-K_mean)
+                    K_means[f'sample{sample_names_0[i][j]}'].append(1-K_mean)
                     # slice_matrix[i, j, pad_y_min:pad_y_max, pad_x_min:pad_x_max, :] = temp_slice
     return pd.DataFrame(K_means)
 	
