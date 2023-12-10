@@ -7,7 +7,6 @@ import os
 from PIL import Image
 from PIL.ExifTags import TAGS
 from collections import defaultdict
-from tqdm import tqdm
 from py2neo import Node, Graph, Relationship
 
 
@@ -140,7 +139,7 @@ def transform_vm(video_matrix):
     M = cv2.getPerspectiveTransform(pts1, pts2)
 
     # If the transformed image looks good, uncomment the following lines to apply the transformation to the whole video_matrix
-    for i in tqdm(range(video_matrix.shape[0])):
+    for i in range(video_matrix.shape[0]):
         transformed[i, :, :, :] = apply_perspective_transform(video_matrix[i, :, :, :], M, cols, rows)
     
     return transformed
